@@ -1,21 +1,23 @@
+# Libraries
 import os
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 
-# 1. Ορίζουμε τις διαδρομές των αρχείων (paths)
+# Paths
 DATA_PATH = "data/hypertension_guidelines.txt"
 CHROMA_PATH = "chroma_db"
 
+# Function to build the vector database
 def build_vector_database():
+    # Load the medical document
     print("1. Φόρτωση του ιατρικού εγγράφου...")
     loader = TextLoader(DATA_PATH, encoding='utf-8')
     documents = loader.load()
 
+    # Chunk the text
     print("2. Τεμαχισμός (Chunking) του κειμένου...")
-    # Χωρίζουμε το κείμενο σε chunks των 400 χαρακτήρων. 
-    # Το overlap (50) διασφαλίζει ότι δεν θα κοπεί μια ιατρική πρόταση στη μέση χάνοντας το νόημα (context).
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000, 
         chunk_overlap=0, # Δεν χρειαζόμαστε overlap αν κόβουμε σε φυσικές παραγράφους
