@@ -16,7 +16,11 @@ def build_vector_database():
     print("2. Τεμαχισμός (Chunking) του κειμένου...")
     # Χωρίζουμε το κείμενο σε chunks των 400 χαρακτήρων. 
     # Το overlap (50) διασφαλίζει ότι δεν θα κοπεί μια ιατρική πρόταση στη μέση χάνοντας το νόημα (context).
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=50)
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000, 
+        chunk_overlap=0, # Δεν χρειαζόμαστε overlap αν κόβουμε σε φυσικές παραγράφους
+        separators=["\n\n", "\n", " ", ""] 
+    )
     chunks = text_splitter.split_documents(documents)
     print(f"--> Δημιουργήθηκαν {len(chunks)} αυτόνομα chunks.")
 
