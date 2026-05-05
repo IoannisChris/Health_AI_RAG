@@ -20,18 +20,18 @@ def build_vector_database():
     print("2. Τεμαχισμός (Chunking) του κειμένου...")
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000, 
-        chunk_overlap=0, # Δεν χρειαζόμαστε overlap αν κόβουμε σε φυσικές παραγράφους
+        chunk_overlap=50,
         separators=["\n\n", "\n", " ", ""] 
     )
     chunks = text_splitter.split_documents(documents)
     print(f"--> Δημιουργήθηκαν {len(chunks)} αυτόνομα chunks.")
 
     print("3. Φόρτωση του μοντέλου Ενσωμάτωσης (Embedding Model)...")
-    # Χρησιμοποιούμε το all-MiniLM-L6-v2. Είναι μικρό, γρήγορο και εκπαιδευμένο να βρίσκει σημασιολογικές ομοιότητες.
+    # Hugging Face Embeddings Model
     embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
     print("4. Αποθήκευση στη Vector Database (ChromaDB)...")
-    # Μετατρέπουμε τα chunks σε διανύσματα και τα γράφουμε στον δίσκο.
+    # Save the chunks to the vector database
     db = Chroma.from_documents(
         chunks, 
         embedding_model, 
